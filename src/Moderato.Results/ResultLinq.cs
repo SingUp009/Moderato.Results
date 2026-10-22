@@ -5,7 +5,10 @@ public static class ResultLinq
 {
     /// <summary><c>select</c></summary>
     public static Result<U, E> Select<T, E, U>(this Result<T, E> source, Func<T, U> selector)
-        => source.Map(selector);
+    {
+        ArgumentNullException.ThrowIfNull(selector);
+        return source.Map(selector);
+    }
 
     /// <summary><c>from … from</c></summary>
     public static Result<U, E> SelectMany<T, E, U>(this Result<T, E> source, Func<T, Result<U, E>> selector)

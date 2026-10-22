@@ -58,6 +58,9 @@ public class NullArgumentTests
     [Fact]
     public void Linq_RejectsNullSelectors()
     {
+        Assert.Throws<ArgumentNullException>("selector", () => Ok(1).Select((Func<int, int>)null!));
+        Assert.Throws<ArgumentNullException>("selector", () => { _ = Later(Ok(1)).Select((Func<int, int>)null!); });
+        Assert.Throws<ArgumentNullException>("selector", () => { _ = AsTask(Ok(1)).Select((Func<int, int>)null!); });
         Assert.Throws<ArgumentNullException>("selector", () => Ok(1).SelectMany((Func<int, Result<int, string>>)null!, static (a, b) => a + b));
         Assert.Throws<ArgumentNullException>("resultSelector", () => { _ = Later(Ok(1)).SelectMany(static x => Ok(x), (Func<int, int, int>)null!); });
     }
