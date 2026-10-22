@@ -259,7 +259,7 @@ Result.CombineAll(err, ok, other);   // Err(string[] { "boom", "bad" })
 
 ### Try
 
-`Result.Try` turns every exception into an Err, including `OperationCanceledException`.
+`Result.Try` turns exceptions into an Err. `OperationCanceledException` is not an error, so it propagates.
 
 ```csharp
 Result.Try(() => int.Parse("12"));                          // Ok(12)
@@ -267,7 +267,7 @@ Result.Try(() => int.Parse("x"));                           // Err(System.Format
 Result.Try(() => int.Parse("x"), ex => ex.GetType().Name);  // Err(FormatException)
 ```
 
-`Result.TryAsync` captures everything the same way.
+`Result.TryAsync` works the same way.
 
 ```csharp
 var parsed = await Result.TryAsync(() => ReadAsync(path), ex => AppError.Io(ex));
