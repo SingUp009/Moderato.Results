@@ -293,11 +293,14 @@ Result.Try(() => int.Parse("x"));                           // Err(System.Format
 Result.Try(() => int.Parse("x"), ex => ex.GetType().Name);  // Err(FormatException)
 ```
 
-`Result.TryAsync` works the same way.
+`Result.TryAsync` works the same way, and takes an optional `CancellationToken` as its last argument. Pass the token, and only the cancellation you asked for propagates; any other `OperationCanceledException` becomes an Err. Use the overloads whose delegate receives the token to pass it on.
 
 ```csharp
-var parsed = await Result.TryAsync(() => ReadAsync(path), ex => AppError.Io(ex));
+var parsed = await Result.TryAsync(ct => ReadAsync(path, ct), ex => AppError.Io(ex), cancellationToken);
 ```
+
+> [!important]
+> `HttpClient` reports a timeout as a `TaskCanceledException`. Without a token, `TryAsync` lets it propagate like any cancellation. Pass your `CancellationToken` so that a timeout becomes an Err while your own cancellation still propagates.
 
 ### LINQ query syntax
 
