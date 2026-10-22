@@ -8,7 +8,7 @@
     <IsAotCompatible>true</IsAotCompatible>
 
     <PackageId>Moderato.Results</PackageId>
-    <Version>0.1.0-preview.1</Version>
+    <Version>0.1.0-preview.2</Version>
     <Description>neverthrow for C#</Description>
     <PackageTags>result;error-handling;union;discriminated-union;neverthrow;functional</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
