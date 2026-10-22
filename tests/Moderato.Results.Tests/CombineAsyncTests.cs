@@ -79,7 +79,7 @@ public class CombineAsyncTests
         }
 
         var combined = Result.CombineAsync([Throws(), Slow()]).AsTask();
-        await Task.Delay(50);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
         Assert.False(combined.IsCompleted);
         gate.SetResult();
         await Assert.ThrowsAsync<InvalidOperationException>(() => combined);
@@ -106,7 +106,7 @@ public class CombineAsyncTests
         }
 
         var combined = Result.CombineAsync([Throws(), Slow()]).AsTask();
-        await Task.Delay(50);
+        await Task.Delay(50, TestContext.Current.CancellationToken);
         Assert.False(combined.IsCompleted);
         gate.SetResult();
         await Assert.ThrowsAsync<InvalidOperationException>(() => combined);
