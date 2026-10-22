@@ -1,6 +1,5 @@
 namespace Moderato.Results.Tests;
 
-// The forms the README recommends for lambdas that build a Result inline.
 public class LambdaTypingTests
 {
     private static Result<int, string> Ok(int v) => Result.Ok(v);

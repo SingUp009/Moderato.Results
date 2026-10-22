@@ -62,7 +62,6 @@ public static partial class Result
         return valueTasks;
     }
 
-    // Awaits every task, even after one throws, then rethrows the first exception.
     private static async ValueTask<Result<T, E>[]> AwaitAll<T, E>(ValueTask<Result<T, E>>[] tasks)
     {
         var results = new Result<T, E>[tasks.Length];
