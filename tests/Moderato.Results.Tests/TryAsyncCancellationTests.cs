@@ -12,8 +12,11 @@ public class TryAsyncCancellationTests
     [Fact]
     public async Task WithoutToken_EveryCancellationPropagates()
     {
+        // This test is about calls without a token, so it must not pass the test's token (xUnit1051).
+#pragma warning disable xUnit1051
         await Assert.ThrowsAsync<TaskCanceledException>(async () => await Result.TryAsync(TimesOut));
         await Assert.ThrowsAsync<TaskCanceledException>(async () => await Result.TryAsync(TimesOut, ex => ex.Message));
+#pragma warning restore xUnit1051
     }
 
     [Fact]
@@ -69,14 +72,14 @@ public class TryAsyncCancellationTests
         using var cts = new CancellationTokenSource();
         static ValueTask<int> Fails() => throw new FormatException();
 
-        Assert.True((await Result.TryAsync(Fails)).IsErr);
+        Assert.True((await Result.TryAsync(Fails, TestContext.Current.CancellationToken)).IsErr);
         Assert.True((await Result.TryAsync(_ => Fails(), cts.Token)).IsErr);
     }
 
     [Fact]
     public void TokenOverloads_RejectNullDelegates()
     {
-        Assert.Throws<ArgumentNullException>("func", () => { _ = Result.TryAsync((Func<CancellationToken, ValueTask<int>>)null!); });
-        Assert.Throws<ArgumentNullException>("errorMapper", () => { _ = Result.TryAsync(static _ => new ValueTask<int>(1), (Func<Exception, string>)null!); });
+        Assert.Throws<ArgumentNullException>("func", () => { _ = Result.TryAsync((Func<CancellationToken, ValueTask<int>>)null!, TestContext.Current.CancellationToken); });
+        Assert.Throws<ArgumentNullException>("errorMapper", () => { _ = Result.TryAsync(static _ => new ValueTask<int>(1), (Func<Exception, string>)null!, TestContext.Current.CancellationToken); });
     }
 }
