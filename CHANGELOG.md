@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0-preview.4] - 2026-10-22
+
 ### Breaking changes
 
 - `Result.TryAsync` overloads whose delegate takes no token no longer take a `CancellationToken`; the token only ever classified exceptions there and never cancelled anything. Pass a delegate that takes the token instead. ([#22](https://github.com/SingUp009/Moderato.Results/pull/22))
@@ -16,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - `Result.TryAsync` with an already canceled token cancels before calling the delegate. ([#22](https://github.com/SingUp009/Moderato.Results/pull/22))
+- The release notes link on NuGet points to the changelog of the published version. ([#23](https://github.com/SingUp009/Moderato.Results/pull/23))
 
 ## [0.1.0-preview.3] - 2026-10-22
 
@@ -66,7 +69,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LINQ query syntax over `Result`, `ValueTask<Result>` and `Task<Result>`.
 - Async extensions on `ValueTask<Result<T, E>>` and `Task<Result<T, E>>`.
 
-[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.3...HEAD
+[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.4...HEAD
+[0.1.0-preview.4]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.3...v0.1.0-preview.4
 [0.1.0-preview.3]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.2...v0.1.0-preview.3
 [0.1.0-preview.2]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.1...v0.1.0-preview.2
 [0.1.0-preview.1]: https://github.com/SingUp009/Moderato.Results/releases/tag/v0.1.0-preview.1
