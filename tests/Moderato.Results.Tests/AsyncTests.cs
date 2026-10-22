@@ -116,10 +116,10 @@ public class AsyncTests
     [Fact]
     public async Task TryAsync_CapturesExceptions()
     {
-        var ok = await Result.TryAsync(async () => { await Task.Yield(); return 1; }, TestContext.Current.CancellationToken);
-        var err = await Result.TryAsync<int>(async () => { await Task.Yield(); throw new InvalidOperationException("boom"); }, TestContext.Current.CancellationToken);
-        var mapped = await Result.TryAsync<int, string>(() => throw new FormatException(), ex => ex.GetType().Name, TestContext.Current.CancellationToken);
-        var stated = await Result.TryAsync(5, static async s => { await Task.Yield(); return s * 2; }, TestContext.Current.CancellationToken);
+        var ok = await Result.TryAsync(async () => { await Task.Yield(); return 1; });
+        var err = await Result.TryAsync<int>(async () => { await Task.Yield(); throw new InvalidOperationException("boom"); });
+        var mapped = await Result.TryAsync<int, string>(() => throw new FormatException(), ex => ex.GetType().Name);
+        var stated = await Result.TryAsync(5, static async s => { await Task.Yield(); return s * 2; });
 
         Assert.Equal(1, ok.UnwrapOr(0));
         Assert.True(err.TryGetErr(out var ex));

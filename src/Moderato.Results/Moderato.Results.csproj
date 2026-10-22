@@ -6,9 +6,6 @@
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsAotCompatible>true</IsAotCompatible>
-    <!-- Async APIs end with an optional CancellationToken by convention, so several overloads share one.
-         Their delegate shapes keep them unambiguous, so RS0026 (PublicApiAnalyzers) does not apply. -->
-    <NoWarn>$(NoWarn);RS0026</NoWarn>
 
     <PackageId>Moderato.Results</PackageId>
     <Version>0.1.0-preview.3</Version>

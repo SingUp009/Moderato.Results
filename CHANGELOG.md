@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Breaking changes
+
+- `Result.TryAsync` overloads whose delegate takes no token no longer take a `CancellationToken`; the token only ever classified exceptions there and never cancelled anything. Pass a delegate that takes the token instead. ([#22](https://github.com/SingUp009/Moderato.Results/pull/22))
+
+### Fixed
+
+- Passing a method group with both `LoadAsync()` and `LoadAsync(CancellationToken)` overloads to `Result.TryAsync` with a token no longer fails with CS0121. ([#22](https://github.com/SingUp009/Moderato.Results/pull/22))
+
+### Changed
+
+- `Result.TryAsync` with an already canceled token cancels before calling the delegate. ([#22](https://github.com/SingUp009/Moderato.Results/pull/22))
+
 ## [0.1.0-preview.3] - 2026-10-22
 
 ### Breaking changes

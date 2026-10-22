@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Moderato.Results;
 
 public static partial class Result
@@ -60,41 +62,39 @@ public static partial class Result
         }
     }
 
-    // TryAsync: with no token, every OperationCanceledException propagates. With a token, only the
-    // caller's cancellation does (the token is canceled); any other, such as an HttpClient timeout, becomes Err.
-    // The token, not the exception's own token, decides, because callees often throw with a linked token.
-
-    /// <summary>Awaits <paramref name="func"/>, capturing exceptions as Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
-    public static ValueTask<Result<T, Exception>> TryAsync<T>(Func<ValueTask<T>> func, CancellationToken cancellationToken = default)
+    /// <summary>Awaits <paramref name="func"/>, capturing exceptions as Err. Cancellation propagates.</summary>
+    public static ValueTask<Result<T, Exception>> TryAsync<T>(Func<ValueTask<T>> func)
     {
         ArgumentNullException.ThrowIfNull(func);
-        return TryCore(func, static (f, _) => f(), Identity, cancellationToken);
+        return TryCore(func, static (f, _) => f(), Identity, default);
     }
 
-    /// <summary>Awaits <paramref name="func"/>, mapping exceptions to Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
-    public static ValueTask<Result<T, E>> TryAsync<T, E>(Func<ValueTask<T>> func, Func<Exception, E> errorMapper, CancellationToken cancellationToken = default)
+    /// <summary>Awaits <paramref name="func"/>, mapping exceptions to Err. Cancellation propagates.</summary>
+    public static ValueTask<Result<T, E>> TryAsync<T, E>(Func<ValueTask<T>> func, Func<Exception, E> errorMapper)
     {
         ArgumentNullException.ThrowIfNull(func);
         ArgumentNullException.ThrowIfNull(errorMapper);
-        return TryCore(func, static (f, _) => f(), errorMapper, cancellationToken);
+        return TryCore(func, static (f, _) => f(), errorMapper, default);
     }
 
-    /// <summary>Awaits <paramref name="func"/> without a closure, capturing exceptions as Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
-    public static ValueTask<Result<T, Exception>> TryAsync<TState, T>(TState state, Func<TState, ValueTask<T>> func, CancellationToken cancellationToken = default)
+    /// <summary>Awaits <paramref name="func"/> without a closure, capturing exceptions as Err. Cancellation propagates.</summary>
+    public static ValueTask<Result<T, Exception>> TryAsync<TState, T>(TState state, Func<TState, ValueTask<T>> func)
     {
         ArgumentNullException.ThrowIfNull(func);
-        return TryCore((state, func), static (s, _) => s.func(s.state), Identity, cancellationToken);
+        return TryCore((state, func), static (s, _) => s.func(s.state), Identity, default);
     }
 
-    /// <summary>Awaits <paramref name="func"/> without a closure, mapping exceptions to Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
-    public static ValueTask<Result<T, E>> TryAsync<TState, T, E>(TState state, Func<TState, ValueTask<T>> func, Func<Exception, E> errorMapper, CancellationToken cancellationToken = default)
+    /// <summary>Awaits <paramref name="func"/> without a closure, mapping exceptions to Err. Cancellation propagates.</summary>
+    public static ValueTask<Result<T, E>> TryAsync<TState, T, E>(TState state, Func<TState, ValueTask<T>> func, Func<Exception, E> errorMapper)
     {
         ArgumentNullException.ThrowIfNull(func);
         ArgumentNullException.ThrowIfNull(errorMapper);
-        return TryCore((state, func), static (s, _) => s.func(s.state), errorMapper, cancellationToken);
+        return TryCore((state, func), static (s, _) => s.func(s.state), errorMapper, default);
     }
 
     /// <summary>Awaits <paramref name="func"/> with <paramref name="cancellationToken"/>, capturing exceptions as Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
+    [SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = OptionalTokenJustification)]
+    [SuppressMessage("ApiDesign", "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads", Justification = OptionalTokenJustification)]
     public static ValueTask<Result<T, Exception>> TryAsync<T>(Func<CancellationToken, ValueTask<T>> func, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(func);
@@ -102,6 +102,8 @@ public static partial class Result
     }
 
     /// <summary>Awaits <paramref name="func"/> with <paramref name="cancellationToken"/>, mapping exceptions to Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
+    [SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = OptionalTokenJustification)]
+    [SuppressMessage("ApiDesign", "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads", Justification = OptionalTokenJustification)]
     public static ValueTask<Result<T, E>> TryAsync<T, E>(Func<CancellationToken, ValueTask<T>> func, Func<Exception, E> errorMapper, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(func);
@@ -110,6 +112,8 @@ public static partial class Result
     }
 
     /// <summary>Awaits <paramref name="func"/> with <paramref name="cancellationToken"/> and without a closure, capturing exceptions as Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
+    [SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = OptionalTokenJustification)]
+    [SuppressMessage("ApiDesign", "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads", Justification = OptionalTokenJustification)]
     public static ValueTask<Result<T, Exception>> TryAsync<TState, T>(TState state, Func<TState, CancellationToken, ValueTask<T>> func, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(func);
@@ -117,6 +121,8 @@ public static partial class Result
     }
 
     /// <summary>Awaits <paramref name="func"/> with <paramref name="cancellationToken"/> and without a closure, mapping exceptions to Err. Cancellation of <paramref name="cancellationToken"/> propagates.</summary>
+    [SuppressMessage("ApiDesign", "RS0026:Do not add multiple public overloads with optional parameters", Justification = OptionalTokenJustification)]
+    [SuppressMessage("ApiDesign", "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads", Justification = OptionalTokenJustification)]
     public static ValueTask<Result<T, E>> TryAsync<TState, T, E>(TState state, Func<TState, CancellationToken, ValueTask<T>> func, Func<Exception, E> errorMapper, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(func);
@@ -124,11 +130,14 @@ public static partial class Result
         return TryCore(state, func, errorMapper, cancellationToken);
     }
 
+    private const string OptionalTokenJustification = "Overloads differ by delegate shape; the trailing token follows the repository's async convention.";
+
     private static readonly Func<Exception, Exception> Identity = static ex => ex;
 
     private static async ValueTask<Result<T, E>> TryCore<TState, T, E>(
         TState state, Func<TState, CancellationToken, ValueTask<T>> func, Func<Exception, E> errorMapper, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         try
         {
             return new Result<T, E>(new Ok<T>(await func(state, cancellationToken).ConfigureAwait(false)));
@@ -139,6 +148,7 @@ public static partial class Result
         }
     }
 
+    // The caller's token decides, not the exception's: callees such as HttpClient throw with a linked token.
     private static bool IsCallerCancellation(Exception ex, CancellationToken cancellationToken)
         => ex is OperationCanceledException && (!cancellationToken.CanBeCanceled || cancellationToken.IsCancellationRequested);
 }

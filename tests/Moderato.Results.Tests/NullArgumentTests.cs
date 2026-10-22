@@ -51,8 +51,8 @@ public class NullArgumentTests
         Assert.Throws<ArgumentNullException>("mapper", () => { _ = Later(Ok(1)).Map((Func<int, int>)null!); });
         Assert.Throws<ArgumentNullException>("binder", () => { _ = Later(Ok(1)).AndThenAsync((Func<int, ValueTask<Result<int, string>>>)null!); });
         Assert.Throws<ArgumentNullException>("fallback", () => { _ = AsTask(Ok(1)).UnwrapOrElse((Func<string, int>)null!); });
-        Assert.Throws<ArgumentNullException>("func", () => { _ = Result.TryAsync((Func<ValueTask<int>>)null!, TestContext.Current.CancellationToken); });
-        Assert.Throws<ArgumentNullException>("errorMapper", () => { _ = Result.TryAsync(static () => new ValueTask<int>(1), (Func<Exception, string>)null!, TestContext.Current.CancellationToken); });
+        Assert.Throws<ArgumentNullException>("func", () => { _ = Result.TryAsync((Func<ValueTask<int>>)null!); });
+        Assert.Throws<ArgumentNullException>("errorMapper", () => { _ = Result.TryAsync(static () => new ValueTask<int>(1), (Func<Exception, string>)null!); });
     }
 
     [Fact]
