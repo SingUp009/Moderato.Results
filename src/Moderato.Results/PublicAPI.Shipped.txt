@@ -58,6 +58,7 @@ Moderato.Results.ResultValueTaskExtensions
 Moderato.Results.Unit
 Moderato.Results.Unit.Equals(Moderato.Results.Unit other) -> bool
 Moderato.Results.Unit.Unit() -> void
+Moderato.Results.Unsafe.ResultUnsafeExtensions
 override Moderato.Results.Err<E>.GetHashCode() -> int
 override Moderato.Results.Err<E>.ToString() -> string!
 override Moderato.Results.Ok<T>.GetHashCode() -> int
@@ -128,10 +129,14 @@ static Moderato.Results.Result.Try<T, E>(System.Func<T>! func, System.Func<Syste
 static Moderato.Results.Result.Try<T>(System.Func<T>! func) -> Moderato.Results.Result<T, System.Exception!>
 static Moderato.Results.Result.Try<TState, T, E>(TState state, System.Func<TState, T>! func, System.Func<System.Exception!, E>! errorMapper) -> Moderato.Results.Result<T, E>
 static Moderato.Results.Result.Try<TState, T>(TState state, System.Func<TState, T>! func) -> Moderato.Results.Result<T, System.Exception!>
-static Moderato.Results.Result.TryAsync<T, E>(System.Func<System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
-static Moderato.Results.Result.TryAsync<T>(System.Func<System.Threading.Tasks.ValueTask<T>>! func) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
-static Moderato.Results.Result.TryAsync<TState, T, E>(TState state, System.Func<TState, System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
-static Moderato.Results.Result.TryAsync<TState, T>(TState state, System.Func<TState, System.Threading.Tasks.ValueTask<T>>! func) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
+static Moderato.Results.Result.TryAsync<T, E>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
+static Moderato.Results.Result.TryAsync<T, E>(System.Func<System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
+static Moderato.Results.Result.TryAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<T>>! func, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
+static Moderato.Results.Result.TryAsync<T>(System.Func<System.Threading.Tasks.ValueTask<T>>! func, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
+static Moderato.Results.Result.TryAsync<TState, T, E>(TState state, System.Func<TState, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
+static Moderato.Results.Result.TryAsync<TState, T, E>(TState state, System.Func<TState, System.Threading.Tasks.ValueTask<T>>! func, System.Func<System.Exception!, E>! errorMapper, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, E>>
+static Moderato.Results.Result.TryAsync<TState, T>(TState state, System.Func<TState, System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<T>>! func, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
+static Moderato.Results.Result.TryAsync<TState, T>(TState state, System.Func<TState, System.Threading.Tasks.ValueTask<T>>! func, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<T, System.Exception!>>
 static Moderato.Results.Result<T, E>.operator !=(Moderato.Results.Result<T, E> left, Moderato.Results.Result<T, E> right) -> bool
 static Moderato.Results.Result<T, E>.operator ==(Moderato.Results.Result<T, E> left, Moderato.Results.Result<T, E> right) -> bool
 static Moderato.Results.ResultAsyncExtensions.AndThenAsync<T, E, TState, U>(this Moderato.Results.Result<T, E> source, TState state, System.Func<TState, T, System.Threading.Tasks.ValueTask<Moderato.Results.Result<U, E>>>! binder) -> System.Threading.Tasks.ValueTask<Moderato.Results.Result<U, E>>
@@ -250,6 +255,8 @@ static Moderato.Results.ResultValueTaskExtensions.UnwrapOrElse<T, E>(this System
 static Moderato.Results.Unit.Value.get -> Moderato.Results.Unit
 static Moderato.Results.Unit.operator !=(Moderato.Results.Unit left, Moderato.Results.Unit right) -> bool
 static Moderato.Results.Unit.operator ==(Moderato.Results.Unit left, Moderato.Results.Unit right) -> bool
+static Moderato.Results.Unsafe.ResultUnsafeExtensions.Unwrap<T, E>(this Moderato.Results.Result<T, E> source) -> T
+static Moderato.Results.Unsafe.ResultUnsafeExtensions.UnwrapErr<T, E>(this Moderato.Results.Result<T, E> source) -> E
 ~override Moderato.Results.Err<E>.Equals(object obj) -> bool
 ~override Moderato.Results.Ok<T>.Equals(object obj) -> bool
 ~override Moderato.Results.Unit.Equals(object obj) -> bool
