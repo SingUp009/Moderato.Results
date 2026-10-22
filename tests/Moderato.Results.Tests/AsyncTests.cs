@@ -129,13 +129,14 @@ public class AsyncTests
     }
 
     [Fact]
-    public async Task TryAsync_CapturesCancellation()
+    public async Task TryAsync_DoesNotCaptureCancellation()
     {
         using var cts = new CancellationTokenSource();
         cts.Cancel();
-        var r = await Result.TryAsync(async () => { await Task.Delay(1000, cts.Token); return 1; });
-        Assert.True(r.TryGetErr(out var ex));
-        Assert.IsAssignableFrom<OperationCanceledException>(ex);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+            await Result.TryAsync(async () => { await Task.Delay(1000, cts.Token); return 1; }));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+            await Result.TryAsync(async () => { await Task.Delay(1000, cts.Token); return 1; }, ex => ex.Message));
     }
 
     [Fact]
