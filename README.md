@@ -76,6 +76,7 @@ var message = result switch
     - [Result stores both T and E](#result-stores-both-t-and-e)
   - [Installation](#installation)
     - [From source](#from-source)
+  - [Changelog](#changelog)
   - [License](#license)
 
 ## Requirements
@@ -346,6 +347,10 @@ dotnet run tools/Generate.cs       # regenerate *.g.cs
 ```
 
 `tools/Generate.cs` produces the `*.g.cs` files under `src/Moderato.Results`: the async receiver overloads and the arity 2 through 8 `Combine` methods. Edit the generator and regenerate rather than editing them by hand.
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/SingUp009/Moderato.Results/blob/main/CHANGELOG.md). Breaking changes are listed first for every release.
 
 ## License
 
