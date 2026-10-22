@@ -147,64 +147,62 @@ static string CombineAsyncTask(int n, string name, string error, string summary)
 
 static Op[] Ops() =>
 [
-    new("Map", "U", "Func<T, U> mapper", "mapper", "Result<U, E>", false, "Maps the value."),
-    new("Map", "TState, U", "TState state, Func<TState, T, U> mapper", "state, mapper", "Result<U, E>", false, "Maps the value without a closure."),
-    new("MapAsync", "U", "Func<T, ValueTask<U>> mapper", "mapper", "Result<U, E>", true, "Maps the value asynchronously."),
-    new("MapAsync", "TState, U", "TState state, Func<TState, T, ValueTask<U>> mapper", "state, mapper", "Result<U, E>", true, "Maps the value asynchronously without a closure."),
+    new("Map", "U", "Func<T, U> mapper", "mapper", "mapper", "Result<U, E>", false, "Maps the value."),
+    new("Map", "TState, U", "TState state, Func<TState, T, U> mapper", "state, mapper", "mapper", "Result<U, E>", false, "Maps the value without a closure."),
+    new("MapAsync", "U", "Func<T, ValueTask<U>> mapper", "mapper", "mapper", "Result<U, E>", true, "Maps the value asynchronously."),
+    new("MapAsync", "TState, U", "TState state, Func<TState, T, ValueTask<U>> mapper", "state, mapper", "mapper", "Result<U, E>", true, "Maps the value asynchronously without a closure."),
 
-    new("MapErr", "F", "Func<E, F> mapper", "mapper", "Result<T, F>", false, "Maps the error."),
-    new("MapErr", "TState, F", "TState state, Func<TState, E, F> mapper", "state, mapper", "Result<T, F>", false, "Maps the error without a closure."),
-    new("MapErrAsync", "F", "Func<E, ValueTask<F>> mapper", "mapper", "Result<T, F>", true, "Maps the error asynchronously."),
-    new("MapErrAsync", "TState, F", "TState state, Func<TState, E, ValueTask<F>> mapper", "state, mapper", "Result<T, F>", true, "Maps the error asynchronously without a closure."),
+    new("MapErr", "F", "Func<E, F> mapper", "mapper", "mapper", "Result<T, F>", false, "Maps the error."),
+    new("MapErr", "TState, F", "TState state, Func<TState, E, F> mapper", "state, mapper", "mapper", "Result<T, F>", false, "Maps the error without a closure."),
+    new("MapErrAsync", "F", "Func<E, ValueTask<F>> mapper", "mapper", "mapper", "Result<T, F>", true, "Maps the error asynchronously."),
+    new("MapErrAsync", "TState, F", "TState state, Func<TState, E, ValueTask<F>> mapper", "state, mapper", "mapper", "Result<T, F>", true, "Maps the error asynchronously without a closure."),
 
-    new("AndThen", "U", "Func<T, Result<U, E>> binder", "binder", "Result<U, E>", false, "Chains a fallible operation on the value."),
-    new("AndThen", "TState, U", "TState state, Func<TState, T, Result<U, E>> binder", "state, binder", "Result<U, E>", false, "Chains a fallible operation on the value without a closure."),
-    new("AndThenAsync", "U", "Func<T, ValueTask<Result<U, E>>> binder", "binder", "Result<U, E>", true, "Chains an async fallible operation on the value."),
-    new("AndThenAsync", "TState, U", "TState state, Func<TState, T, ValueTask<Result<U, E>>> binder", "state, binder", "Result<U, E>", true, "Chains an async fallible operation on the value without a closure."),
+    new("AndThen", "U", "Func<T, Result<U, E>> binder", "binder", "binder", "Result<U, E>", false, "Chains a fallible operation on the value."),
+    new("AndThen", "TState, U", "TState state, Func<TState, T, Result<U, E>> binder", "state, binder", "binder", "Result<U, E>", false, "Chains a fallible operation on the value without a closure."),
+    new("AndThenAsync", "U", "Func<T, ValueTask<Result<U, E>>> binder", "binder", "binder", "Result<U, E>", true, "Chains an async fallible operation on the value."),
+    new("AndThenAsync", "TState, U", "TState state, Func<TState, T, ValueTask<Result<U, E>>> binder", "state, binder", "binder", "Result<U, E>", true, "Chains an async fallible operation on the value without a closure."),
 
-    new("AndThrough", "U", "Func<T, Result<U, E>> check", "check", "Result<T, E>", false, "Runs a fallible check on the value, keeping the value if it passes."),
-    new("AndThrough", "", "Func<T, Result<Unit, E>> check", "check", "Result<T, E>", false, "Runs a fallible check on the value, keeping the value if it passes."),
-    new("AndThrough", "TState, U", "TState state, Func<TState, T, Result<U, E>> check", "state, check", "Result<T, E>", false, "Runs a fallible check on the value without a closure, keeping the value if it passes."),
-    new("AndThrough", "TState", "TState state, Func<TState, T, Result<Unit, E>> check", "state, check", "Result<T, E>", false, "Runs a fallible check on the value without a closure, keeping the value if it passes."),
-    new("AndThroughAsync", "U", "Func<T, ValueTask<Result<U, E>>> check", "check", "Result<T, E>", true, "Runs an async fallible check on the value, keeping the value if it passes."),
-    new("AndThroughAsync", "", "Func<T, ValueTask<Result<Unit, E>>> check", "check", "Result<T, E>", true, "Runs an async fallible check on the value, keeping the value if it passes."),
-    new("AndThroughAsync", "TState, U", "TState state, Func<TState, T, ValueTask<Result<U, E>>> check", "state, check", "Result<T, E>", true, "Runs an async fallible check on the value without a closure, keeping the value if it passes."),
-    new("AndThroughAsync", "TState", "TState state, Func<TState, T, ValueTask<Result<Unit, E>>> check", "state, check", "Result<T, E>", true, "Runs an async fallible check on the value without a closure, keeping the value if it passes."),
+    new("AndThrough", "U", "Func<T, Result<U, E>> check", "check", "check", "Result<T, E>", false, "Runs a fallible check on the value, keeping the value if it passes."),
+    new("AndThrough", "", "Func<T, Result<Unit, E>> check", "check", "check", "Result<T, E>", false, "Runs a fallible check on the value, keeping the value if it passes."),
+    new("AndThrough", "TState, U", "TState state, Func<TState, T, Result<U, E>> check", "state, check", "check", "Result<T, E>", false, "Runs a fallible check on the value without a closure, keeping the value if it passes."),
+    new("AndThrough", "TState", "TState state, Func<TState, T, Result<Unit, E>> check", "state, check", "check", "Result<T, E>", false, "Runs a fallible check on the value without a closure, keeping the value if it passes."),
+    new("AndThroughAsync", "U", "Func<T, ValueTask<Result<U, E>>> check", "check", "check", "Result<T, E>", true, "Runs an async fallible check on the value, keeping the value if it passes."),
+    new("AndThroughAsync", "", "Func<T, ValueTask<Result<Unit, E>>> check", "check", "check", "Result<T, E>", true, "Runs an async fallible check on the value, keeping the value if it passes."),
+    new("AndThroughAsync", "TState, U", "TState state, Func<TState, T, ValueTask<Result<U, E>>> check", "state, check", "check", "Result<T, E>", true, "Runs an async fallible check on the value without a closure, keeping the value if it passes."),
+    new("AndThroughAsync", "TState", "TState state, Func<TState, T, ValueTask<Result<Unit, E>>> check", "state, check", "check", "Result<T, E>", true, "Runs an async fallible check on the value without a closure, keeping the value if it passes."),
 
-    new("OrElse", "F", "Func<E, Result<T, F>> binder", "binder", "Result<T, F>", false, "Recovers from the error."),
-    new("OrElse", "TState, F", "TState state, Func<TState, E, Result<T, F>> binder", "state, binder", "Result<T, F>", false, "Recovers from the error without a closure."),
-    new("OrElseAsync", "F", "Func<E, ValueTask<Result<T, F>>> binder", "binder", "Result<T, F>", true, "Recovers from the error asynchronously."),
-    new("OrElseAsync", "TState, F", "TState state, Func<TState, E, ValueTask<Result<T, F>>> binder", "state, binder", "Result<T, F>", true, "Recovers from the error asynchronously without a closure."),
+    new("OrElse", "F", "Func<E, Result<T, F>> binder", "binder", "binder", "Result<T, F>", false, "Recovers from the error."),
+    new("OrElse", "TState, F", "TState state, Func<TState, E, Result<T, F>> binder", "state, binder", "binder", "Result<T, F>", false, "Recovers from the error without a closure."),
+    new("OrElseAsync", "F", "Func<E, ValueTask<Result<T, F>>> binder", "binder", "binder", "Result<T, F>", true, "Recovers from the error asynchronously."),
+    new("OrElseAsync", "TState, F", "TState state, Func<TState, E, ValueTask<Result<T, F>>> binder", "state, binder", "binder", "Result<T, F>", true, "Recovers from the error asynchronously without a closure."),
 
-    new("Match", "R", "Func<T, R> ok, Func<E, R> err", "ok, err", "R", false, "Folds into a single value."),
-    new("Match", "TState, R", "TState state, Func<TState, T, R> ok, Func<TState, E, R> err", "state, ok, err", "R", false, "Folds into a single value without a closure."),
-    new("MatchAsync", "R", "Func<T, ValueTask<R>> ok, Func<E, ValueTask<R>> err", "ok, err", "R", true, "Folds into a single value asynchronously."),
-    new("MatchAsync", "TState, R", "TState state, Func<TState, T, ValueTask<R>> ok, Func<TState, E, ValueTask<R>> err", "state, ok, err", "R", true, "Folds into a single value asynchronously without a closure."),
-    new("Match", "", "Action<T> ok, Action<E> err", "ok, err", "", false, "Runs the action for the current case."),
-    new("Match", "TState", "TState state, Action<TState, T> ok, Action<TState, E> err", "state, ok, err", "", false, "Runs the action for the current case without a closure."),
+    new("Match", "R", "Func<T, R> ok, Func<E, R> err", "ok, err", "ok, err", "R", false, "Folds into a single value."),
+    new("Match", "TState, R", "TState state, Func<TState, T, R> ok, Func<TState, E, R> err", "state, ok, err", "ok, err", "R", false, "Folds into a single value without a closure."),
+    new("MatchAsync", "R", "Func<T, ValueTask<R>> ok, Func<E, ValueTask<R>> err", "ok, err", "ok, err", "R", true, "Folds into a single value asynchronously."),
+    new("MatchAsync", "TState, R", "TState state, Func<TState, T, ValueTask<R>> ok, Func<TState, E, ValueTask<R>> err", "state, ok, err", "ok, err", "R", true, "Folds into a single value asynchronously without a closure."),
+    new("Match", "", "Action<T> ok, Action<E> err", "ok, err", "ok, err", "", false, "Runs the action for the current case."),
+    new("Match", "TState", "TState state, Action<TState, T> ok, Action<TState, E> err", "state, ok, err", "ok, err", "", false, "Runs the action for the current case without a closure."),
 
-    new("Tap", "", "Action<T> action", "action", "Result<T, E>", false, "Runs a side effect on the value."),
-    new("Tap", "TState", "TState state, Action<TState, T> action", "state, action", "Result<T, E>", false, "Runs a side effect on the value without a closure."),
-    new("TapAsync", "", "Func<T, ValueTask> action", "action", "Result<T, E>", true, "Runs an async side effect on the value."),
-    new("TapAsync", "TState", "TState state, Func<TState, T, ValueTask> action", "state, action", "Result<T, E>", true, "Runs an async side effect on the value without a closure."),
-    new("TapErr", "", "Action<E> action", "action", "Result<T, E>", false, "Runs a side effect on the error."),
-    new("TapErr", "TState", "TState state, Action<TState, E> action", "state, action", "Result<T, E>", false, "Runs a side effect on the error without a closure."),
-    new("TapErrAsync", "", "Func<E, ValueTask> action", "action", "Result<T, E>", true, "Runs an async side effect on the error."),
-    new("TapErrAsync", "TState", "TState state, Func<TState, E, ValueTask> action", "state, action", "Result<T, E>", true, "Runs an async side effect on the error without a closure."),
+    new("Tap", "", "Action<T> action", "action", "action", "Result<T, E>", false, "Runs a side effect on the value."),
+    new("Tap", "TState", "TState state, Action<TState, T> action", "state, action", "action", "Result<T, E>", false, "Runs a side effect on the value without a closure."),
+    new("TapAsync", "", "Func<T, ValueTask> action", "action", "action", "Result<T, E>", true, "Runs an async side effect on the value."),
+    new("TapAsync", "TState", "TState state, Func<TState, T, ValueTask> action", "state, action", "action", "Result<T, E>", true, "Runs an async side effect on the value without a closure."),
+    new("TapErr", "", "Action<E> action", "action", "action", "Result<T, E>", false, "Runs a side effect on the error."),
+    new("TapErr", "TState", "TState state, Action<TState, E> action", "state, action", "action", "Result<T, E>", false, "Runs a side effect on the error without a closure."),
+    new("TapErrAsync", "", "Func<E, ValueTask> action", "action", "action", "Result<T, E>", true, "Runs an async side effect on the error."),
+    new("TapErrAsync", "TState", "TState state, Func<TState, E, ValueTask> action", "state, action", "action", "Result<T, E>", true, "Runs an async side effect on the error without a closure."),
 
-    new("UnwrapOr", "", "T defaultValue", "defaultValue", "T", false, "Returns the value, or <paramref name=\"defaultValue\"/> if Err."),
-    new("UnwrapOrElse", "", "Func<E, T> fallback", "fallback", "T", false, "Returns the value, or one computed from the error."),
-    new("UnwrapOrElse", "TState", "TState state, Func<TState, E, T> fallback", "state, fallback", "T", false, "Returns the value, or one computed from the error without a closure."),
+    new("UnwrapOr", "", "T defaultValue", "defaultValue", "", "T", false, "Returns the value, or <paramref name=\"defaultValue\"/> if Err."),
+    new("UnwrapOrElse", "", "Func<E, T> fallback", "fallback", "fallback", "T", false, "Returns the value, or one computed from the error."),
+    new("UnwrapOrElse", "TState", "TState state, Func<TState, E, T> fallback", "state, fallback", "fallback", "T", false, "Returns the value, or one computed from the error without a closure."),
 ];
 
 static string TypeParams(Op op) => op.Extra.Length > 0 ? $"T, E, {op.Extra}" : "T, E";
 
 static string Return(Op op) => op.Inner.Length > 0 ? $"ValueTask<{op.Inner}>" : "ValueTask";
 
-// Every argument except state and defaultValue is a delegate.
-static string NullChecks(Op op) => string.Concat(op.Args.Split(", ")
-    .Where(a => a is not ("state" or "defaultValue"))
-    .Select(a => $"        ArgumentNullException.ThrowIfNull({a});\n"));
+static string NullChecks(Op op) => string.Concat(op.Delegates.Split(", ", StringSplitOptions.RemoveEmptyEntries)
+    .Select(d => $"        ArgumentNullException.ThrowIfNull({d});\n"));
 
 static string ValueTaskReceiver(Op op)
 {
@@ -335,4 +333,5 @@ static string SelectMany(char src, char sel)
          + "    }\n";
 }
 
-record Op(string Name, string Extra, string Params, string Args, string Inner, bool IsAsync, string Summary);
+// Delegates lists the delegate parameters to null-check; Args is the full argument list.
+record Op(string Name, string Extra, string Params, string Args, string Delegates, string Inner, bool IsAsync, string Summary);
