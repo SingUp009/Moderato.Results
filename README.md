@@ -44,9 +44,7 @@ var message = result switch
 };
 ```
 
-> [!warning]
-> .NET 11 is preview now.
-> So this library is also preview.
+**Warning:** .NET 11 is in preview, and so is this library.
 
 ## Table of contents
 
@@ -383,4 +381,4 @@ See [CHANGELOG.md](https://github.com/SingUp009/Moderato.Results/blob/main/CHANG
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](https://github.com/SingUp009/Moderato.Results/blob/main/LICENSE).
