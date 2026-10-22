@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0-preview.3] - 2026-10-22
+
+### Breaking changes
+
+- Every `Result.TryAsync` overload ends with `CancellationToken cancellationToken = default`. Source-compatible, but code compiled against 0.1.0-preview.2 must be recompiled. ([#18](https://github.com/SingUp009/Moderato.Results/pull/18))
+
+### Added
+
+- `Unwrap()` and `UnwrapErr()` in the `Moderato.Results.Unsafe` namespace: throwing accessors for tests, in scope only where the namespace is imported. ([#14](https://github.com/SingUp009/Moderato.Results/pull/14))
+- `Result.TryAsync` overloads whose delegate receives the `CancellationToken`. With a token, only its own cancellation propagates; any other `OperationCanceledException`, such as an `HttpClient` timeout, becomes an Err. ([#18](https://github.com/SingUp009/Moderato.Results/pull/18))
+
+### Fixed
+
+- `Combine` over a lazy sequence stops enumerating at the first Err again, so later elements are not evaluated and infinite sequences return. Arrays and lists are still checked for `default` in full. ([#16](https://github.com/SingUp009/Moderato.Results/pull/16))
+- `Select` reports `selector` as the parameter name when it is `null`. ([#17](https://github.com/SingUp009/Moderato.Results/pull/17))
+
+### Changed
+
+- The published package is exactly the one built and tested in CI, and the release tag must match `<Version>`. ([#20](https://github.com/SingUp009/Moderato.Results/pull/20))
+
 ## [0.1.0-preview.2] - 2026-10-22
 
 ### Breaking changes
@@ -34,6 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LINQ query syntax over `Result`, `ValueTask<Result>` and `Task<Result>`.
 - Async extensions on `ValueTask<Result<T, E>>` and `Task<Result<T, E>>`.
 
-[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.2...HEAD
+[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.3...HEAD
+[0.1.0-preview.3]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.2...v0.1.0-preview.3
 [0.1.0-preview.2]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.1...v0.1.0-preview.2
 [0.1.0-preview.1]: https://github.com/SingUp009/Moderato.Results/releases/tag/v0.1.0-preview.1
