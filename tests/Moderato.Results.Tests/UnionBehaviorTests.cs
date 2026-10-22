@@ -31,7 +31,7 @@ public class UnionBehaviorTests
             Assert.False(r.HasValue);
             Assert.False(r.TryGetValue(out Ok<int> _));
             Assert.False(r.TryGetValue(out Err<string> _));
-            Assert.Throws<InvalidOperationException>(() => r.Value);
+            Assert.Null(r.Value);
             return;
         }
 
