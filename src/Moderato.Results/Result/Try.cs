@@ -62,12 +62,6 @@ public static partial class Result
         }
     }
 
-    // TryAsync: a delegate that takes no token gets no token parameter either, so every
-    // OperationCanceledException propagates. When the delegate takes the token, only the caller's
-    // cancellation propagates (the token is canceled); any other, such as an HttpClient timeout, becomes Err.
-    // The token, not the exception's own token, decides, because callees often throw with a linked token.
-    // A token that is already canceled stops the call before the delegate runs.
-
     /// <summary>Awaits <paramref name="func"/>, capturing exceptions as Err. Cancellation propagates.</summary>
     public static ValueTask<Result<T, Exception>> TryAsync<T>(Func<ValueTask<T>> func)
     {
@@ -136,8 +130,6 @@ public static partial class Result
         return TryCore(state, func, errorMapper, cancellationToken);
     }
 
-    // Async APIs end with an optional CancellationToken by convention. These overloads differ in their
-    // delegate shapes, so callers never meet an ambiguity from the shared optional parameter.
     private const string OptionalTokenJustification = "Overloads differ by delegate shape; the trailing token follows the repository's async convention.";
 
     private static readonly Func<Exception, Exception> Identity = static ex => ex;
@@ -156,6 +148,7 @@ public static partial class Result
         }
     }
 
+    // The caller's token decides, not the exception's: callees such as HttpClient throw with a linked token.
     private static bool IsCallerCancellation(Exception ex, CancellationToken cancellationToken)
         => ex is OperationCanceledException && (!cancellationToken.CanBeCanceled || cancellationToken.IsCancellationRequested);
 }

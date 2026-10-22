@@ -2,7 +2,6 @@ namespace Moderato.Results.Tests;
 
 public class TryAsyncCancellationTests
 {
-    // What HttpClient throws on a timeout: a cancellation that the caller did not request.
     private static async ValueTask<int> TimesOut()
     {
         await Task.Yield();
@@ -51,7 +50,6 @@ public class TryAsyncCancellationTests
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cts.Token);
         cts.Cancel();
 
-        // The exception carries the linked token, not the caller's, yet the caller asked for it.
         await Assert.ThrowsAsync<OperationCanceledException>(async () =>
             await Result.TryAsync<int>(_ => throw new OperationCanceledException(linked.Token), cts.Token));
     }
@@ -98,7 +96,6 @@ public class TryAsyncCancellationTests
     [Fact]
     public async Task MethodGroups_BindWithoutAmbiguity()
     {
-        // A BCL-style pair of overloads must not make TryAsync ambiguous (CS0121).
         var token = TestContext.Current.CancellationToken;
         Assert.Equal(2, (await Result.TryAsync(Api.LoadAsync, token)).UnwrapOr(0));
         Assert.Equal(3, (await Result.TryAsync(Api.LoadWithOptionalTokenAsync, token)).UnwrapOr(0));
