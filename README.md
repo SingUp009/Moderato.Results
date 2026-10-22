@@ -72,6 +72,8 @@ var message = result switch
   - [Caveats](#caveats)
     - [default(Result) is an invalid state](#defaultresult-is-an-invalid-state)
     - [Lambdas that build a Result inline need a type](#lambdas-that-build-a-result-inline-need-a-type)
+    - [Async results can be awaited only once](#async-results-can-be-awaited-only-once)
+    - [Result stores both T and E](#result-stores-both-t-and-e)
   - [Installation](#installation)
     - [From source](#from-source)
   - [License](#license)
@@ -320,6 +322,14 @@ result.AndThen(Result<int, string> (x) => x > 0 ? Result.Ok(x) : Result.Err("neg
 ```
 
 The second form also works on state overloads and on calls against `ValueTask` and `Task`. Neither is needed when you pass a method that returns `Result<…>`, as in `.AndThen(Validate)`. An `AndThrough` check returning `Result<Unit, E>` infers on its own.
+
+### Async results can be awaited only once
+
+The async APIs return `ValueTask<Result<T, E>>`. Like any `ValueTask`, it must be consumed exactly once: don't await it twice or read `.Result` twice. To keep it around or await it from several places, convert it first with `.AsTask()` or `.Preserve()`.
+
+### Result stores both T and E
+
+`Result<T, E>` is a struct with a field for each of `T` and `E`, so its size is roughly the sum of the two. With small types or references this costs nothing noticeable, but a large struct payload is copied at every step of a chain and into each async state machine. Prefer references or small error types for large payloads.
 
 ## Installation
 
