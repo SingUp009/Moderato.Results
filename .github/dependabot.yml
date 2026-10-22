@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Actions are pinned by commit SHA; Dependabot updates the SHA and its version comment together.
   - package-ecosystem: github-actions
     directory: /
     schedule:
