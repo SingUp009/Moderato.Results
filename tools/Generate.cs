@@ -201,6 +201,11 @@ static string TypeParams(Op op) => op.Extra.Length > 0 ? $"T, E, {op.Extra}" : "
 
 static string Return(Op op) => op.Inner.Length > 0 ? $"ValueTask<{op.Inner}>" : "ValueTask";
 
+// Every argument except state and defaultValue is a delegate.
+static string NullChecks(Op op) => string.Concat(op.Args.Split(", ")
+    .Where(a => a is not ("state" or "defaultValue"))
+    .Select(a => $"        ArgumentNullException.ThrowIfNull({a});\n"));
+
 static string ValueTaskReceiver(Op op)
 {
     var r = Return(op);
@@ -230,6 +235,7 @@ static string ValueTaskReceiver(Op op)
     return $"\n    /// <summary>{op.Summary}</summary>\n"
          + $"    public static {r} {op.Name}<{TypeParams(op)}>(this ValueTask<Result<T, E>> source, {op.Params})\n"
          + "    {\n"
+         + NullChecks(op)
          + fastPath
          + $"        return Core(source, {op.Args});\n"
          + "\n"
@@ -297,27 +303,35 @@ static string SelectMany(char src, char sel)
 {
     var getS = src == 'R' ? "source" : "await source.ConfigureAwait(false)";
     var getN = sel == 'R' ? "selector(t)" : "await selector(t).ConfigureAwait(false)";
+    var ps = $"{SourceType(src, "T")} source, Func<T, {SourceType(sel, "U")}> selector, Func<T, U, V> resultSelector";
     return "\n    /// <summary><c>from … from … select</c></summary>\n"
-         + "    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(\n"
+         + "    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(\n"
          + $"        this {SourceType(src, "T")} source,\n"
          + $"        Func<T, {SourceType(sel, "U")}> selector,\n"
          + "        Func<T, U, V> resultSelector)\n"
          + "    {\n"
-         + $"        var s = {getS};\n"
-         + "        if (!s.TryGetOk(out var t))\n"
-         + "        {\n"
-         + "            s.ThrowIfDefault();\n"
-         + "            return new Result<V, E>(new Err<E>(s._error));\n"
-         + "        }\n"
+         + "        ArgumentNullException.ThrowIfNull(selector);\n"
+         + "        ArgumentNullException.ThrowIfNull(resultSelector);\n"
+         + "        return Core(source, selector, resultSelector);\n"
          + "\n"
-         + $"        var n = {getN};\n"
-         + "        if (!n.TryGetOk(out var u))\n"
+         + $"        static async ValueTask<Result<V, E>> Core({ps})\n"
          + "        {\n"
-         + "            n.ThrowIfDefault();\n"
-         + "            return new Result<V, E>(new Err<E>(n._error));\n"
-         + "        }\n"
+         + $"            var s = {getS};\n"
+         + "            if (!s.TryGetOk(out var t))\n"
+         + "            {\n"
+         + "                s.ThrowIfDefault();\n"
+         + "                return new Result<V, E>(new Err<E>(s._error));\n"
+         + "            }\n"
          + "\n"
-         + "        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));\n"
+         + $"            var n = {getN};\n"
+         + "            if (!n.TryGetOk(out var u))\n"
+         + "            {\n"
+         + "                n.ThrowIfDefault();\n"
+         + "                return new Result<V, E>(new Err<E>(n._error));\n"
+         + "            }\n"
+         + "\n"
+         + "            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));\n"
+         + "        }\n"
          + "    }\n";
 }
 

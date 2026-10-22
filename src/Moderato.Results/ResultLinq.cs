@@ -17,6 +17,8 @@ public static class ResultLinq
         Func<T, Result<U, E>> selector,
         Func<T, U, V> resultSelector)
     {
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
         if (source._state == Result<T, E>.StateOk)
         {
             var t = source._value;

@@ -17,186 +17,242 @@ public static class ResultLinqAsync
         => source.Map(selector);
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this Result<T, E> source,
         Func<T, ValueTask<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = source;
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(Result<T, E> source, Func<T, ValueTask<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = source;
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this Result<T, E> source,
         Func<T, Task<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = source;
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(Result<T, E> source, Func<T, Task<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = source;
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this ValueTask<Result<T, E>> source,
         Func<T, Result<U, E>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = selector(t);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(ValueTask<Result<T, E>> source, Func<T, Result<U, E>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = selector(t);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this ValueTask<Result<T, E>> source,
         Func<T, ValueTask<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(ValueTask<Result<T, E>> source, Func<T, ValueTask<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this ValueTask<Result<T, E>> source,
         Func<T, Task<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(ValueTask<Result<T, E>> source, Func<T, Task<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this Task<Result<T, E>> source,
         Func<T, Result<U, E>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = selector(t);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(Task<Result<T, E>> source, Func<T, Result<U, E>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = selector(t);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this Task<Result<T, E>> source,
         Func<T, ValueTask<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(Task<Result<T, E>> source, Func<T, ValueTask<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 
     /// <summary><c>from … from … select</c></summary>
-    public static async ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
+    public static ValueTask<Result<V, E>> SelectMany<T, E, U, V>(
         this Task<Result<T, E>> source,
         Func<T, Task<Result<U, E>>> selector,
         Func<T, U, V> resultSelector)
     {
-        var s = await source.ConfigureAwait(false);
-        if (!s.TryGetOk(out var t))
-        {
-            s.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(s._error));
-        }
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resultSelector);
+        return Core(source, selector, resultSelector);
 
-        var n = await selector(t).ConfigureAwait(false);
-        if (!n.TryGetOk(out var u))
+        static async ValueTask<Result<V, E>> Core(Task<Result<T, E>> source, Func<T, Task<Result<U, E>>> selector, Func<T, U, V> resultSelector)
         {
-            n.ThrowIfDefault();
-            return new Result<V, E>(new Err<E>(n._error));
-        }
+            var s = await source.ConfigureAwait(false);
+            if (!s.TryGetOk(out var t))
+            {
+                s.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(s._error));
+            }
 
-        return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+            var n = await selector(t).ConfigureAwait(false);
+            if (!n.TryGetOk(out var u))
+            {
+                n.ThrowIfDefault();
+                return new Result<V, E>(new Err<E>(n._error));
+            }
+
+            return new Result<V, E>(new Ok<V>(resultSelector(t, u)));
+        }
     }
 }
