@@ -268,11 +268,17 @@ static string LinqAsyncFile()
 
     /// <summary><c>select</c></summary>
     public static ValueTask<Result<U, E>> Select<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, U> selector)
-        => source.Map(selector);
+    {
+        ArgumentNullException.ThrowIfNull(selector);
+        return source.Map(selector);
+    }
 
     /// <summary><c>select</c></summary>
     public static ValueTask<Result<U, E>> Select<T, E, U>(this Task<Result<T, E>> source, Func<T, U> selector)
-        => source.Map(selector);
+    {
+        ArgumentNullException.ThrowIfNull(selector);
+        return source.Map(selector);
+    }
 
 """);
 
