@@ -35,12 +35,12 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
         _state = StateErr;
     }
 
-    /// <summary>The boxed case. Allocates; pattern matching does not use it.</summary>
-    public object Value => _state switch
+    /// <summary>The boxed case, or <see langword="null"/> for <c>default</c>. Allocates; pattern matching does not use it.</summary>
+    public object? Value => _state switch
     {
         StateOk => new Ok<T>(_value),
         StateErr => new Err<E>(_error),
-        _ => ThrowHelper.ThrowUninitialized<object>(),
+        _ => null,
     };
 
     /// <summary>False only for <c>default</c>.</summary>

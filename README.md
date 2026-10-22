@@ -308,7 +308,7 @@ Async delegates return `ValueTask`. To call a method that returns `Task<T>`, wri
 
 ### default(Result) is an invalid state
 
-`default(Result<T, E>)` is neither Ok nor Err. `HasValue`, `IsOk` and `IsErr` return `false`, and so do `TryGetOk`, `TryGetErr` and `TryGetValue`. Members that work with the value, such as `Map` and `AndThen`, throw `InvalidOperationException`. Always create results with `Result.Ok` or `Result.Err`.
+`default(Result<T, E>)` is neither Ok nor Err. `HasValue`, `IsOk` and `IsErr` return `false`, and so do `TryGetOk`, `TryGetErr` and `TryGetValue`. `Value` is `null`. Members that work with the value, such as `Map` and `AndThen`, throw `InvalidOperationException`. Always create results with `Result.Ok` or `Result.Err`.
 
 ### Lambdas that build a Result inline need a type
 
