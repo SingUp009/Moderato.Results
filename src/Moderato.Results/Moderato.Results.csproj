@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Moderato.Results</AssemblyName>
+    <RootNamespace>Moderato.Results</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsAotCompatible>true</IsAotCompatible>
+
+    <PackageId>Moderato.Results</PackageId>
+    <Version>0.1.0-preview.1</Version>
+    <Description>neverthrow for C#</Description>
+    <PackageTags>result;error-handling;union;discriminated-union;neverthrow;functional</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="Moderato.Results.Tests" />
+  </ItemGroup>
+
+</Project>
