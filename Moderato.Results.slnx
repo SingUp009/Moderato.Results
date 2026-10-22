@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Moderato.Results/Moderato.Results.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Moderato.Results.Tests/Moderato.Results.Tests.csproj" />
+  </Folder>
+  <Folder Name="/bench/">
+    <Project Path="bench/Moderato.Results.Benchmarks/Moderato.Results.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Moderato.Results.Samples/Moderato.Results.Samples.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+  </Folder>
+</Solution>
