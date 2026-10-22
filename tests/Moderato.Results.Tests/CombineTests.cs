@@ -49,6 +49,15 @@ public class CombineTests
     }
 
     [Fact]
+    public void Combine_ThrowsOnDefaultAfterErr()
+    {
+        Assert.Throws<InvalidOperationException>(() => Result.Combine(Err("e"), default(Result<int, string>)));
+        Assert.Throws<InvalidOperationException>(() => Result.Combine(new[] { Err("e"), default }));
+        Assert.Throws<InvalidOperationException>(() => Result.Combine(new List<Result<int, string>> { Err("e"), default }));
+        Assert.Throws<InvalidOperationException>(() => Result.Combine(new[] { Err("e"), default }.Select(r => r)));
+    }
+
+    [Fact]
     public void CombineAll_CollectsEveryError()
     {
         var tuple = Result.CombineAll(Err("a"), Ok(2), Err("c"));

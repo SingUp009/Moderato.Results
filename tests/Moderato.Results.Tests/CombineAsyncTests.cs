@@ -87,6 +87,47 @@ public class CombineAsyncTests
     }
 
     [Fact]
+    public async Task Sequence_Task_AwaitsEveryTaskBeforeRethrowing()
+    {
+        var gate = new TaskCompletionSource();
+        var finished = false;
+
+        async Task<Result<int, string>> Throws()
+        {
+            await Task.Yield();
+            throw new InvalidOperationException("boom");
+        }
+
+        async Task<Result<int, string>> Slow()
+        {
+            await gate.Task;
+            finished = true;
+            return Ok(1);
+        }
+
+        var combined = Result.CombineAsync([Throws(), Slow()]).AsTask();
+        await Task.Delay(50);
+        Assert.False(combined.IsCompleted);
+        gate.SetResult();
+        await Assert.ThrowsAsync<InvalidOperationException>(() => combined);
+        Assert.True(finished);
+    }
+
+    [Fact]
+    public async Task Sequence_RethrowsFirstExceptionInArgumentOrder()
+    {
+        // Task.WhenAll would prefer the fault; both overloads follow argument order instead.
+        Task<Result<int, string>> Canceled() => Task.FromCanceled<Result<int, string>>(new CancellationToken(true));
+        Task<Result<int, string>> Faulted() => Task.FromException<Result<int, string>>(new InvalidOperationException());
+
+        await Assert.ThrowsAsync<TaskCanceledException>(async () => await Result.CombineAsync([Canceled(), Faulted()]));
+        await Assert.ThrowsAsync<TaskCanceledException>(async () => await Result.CombineAllAsync([Canceled(), Faulted()]));
+        await Assert.ThrowsAsync<TaskCanceledException>(async () =>
+            await Result.CombineAsync([new ValueTask<Result<int, string>>(Canceled()), new ValueTask<Result<int, string>>(Faulted())]));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Result.CombineAsync([Faulted(), Canceled()]));
+    }
+
+    [Fact]
     public async Task Tuple_ValueTaskAndTask()
     {
         var r = await Result.CombineAsync(Later(Ok(1)), Later<string>(Result.Ok("a")), new ValueTask<Result<int, string>>(Ok(3)));

@@ -259,7 +259,7 @@ Result.CombineAll(err, ok, other);   // Err(string[] { "boom", "bad" })
 
 ### Try
 
-`Result.Try` turns every exception into an Err, including `OperationCanceledException`.
+`Result.Try` turns exceptions into an Err. `OperationCanceledException` is not an error, so it propagates.
 
 ```csharp
 Result.Try(() => int.Parse("12"));                          // Ok(12)
@@ -267,7 +267,7 @@ Result.Try(() => int.Parse("x"));                           // Err(System.Format
 Result.Try(() => int.Parse("x"), ex => ex.GetType().Name);  // Err(FormatException)
 ```
 
-`Result.TryAsync` captures everything the same way.
+`Result.TryAsync` works the same way.
 
 ```csharp
 var parsed = await Result.TryAsync(() => ReadAsync(path), ex => AppError.Io(ex));
@@ -308,7 +308,7 @@ Async delegates return `ValueTask`. To call a method that returns `Task<T>`, wri
 
 ### default(Result) is an invalid state
 
-`default(Result<T, E>)` is neither Ok nor Err. `HasValue`, `IsOk` and `IsErr` return `false`, and so do `TryGetOk`, `TryGetErr` and `TryGetValue`. Members that work with the value, such as `Map` and `AndThen`, throw `InvalidOperationException`. Always create results with `Result.Ok` or `Result.Err`.
+`default(Result<T, E>)` is neither Ok nor Err. `HasValue`, `IsOk` and `IsErr` return `false`, and so do `TryGetOk`, `TryGetErr` and `TryGetValue`. `Value` is `null`. Members that work with the value, such as `Map` and `AndThen`, throw `InvalidOperationException`. Always create results with `Result.Ok` or `Result.Err`.
 
 ### Lambdas that build a Result inline need a type
 

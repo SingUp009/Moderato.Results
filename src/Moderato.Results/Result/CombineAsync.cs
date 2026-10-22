@@ -20,10 +20,7 @@ public static partial class Result
     public static ValueTask<Result<T[], E>> CombineAsync<T, E>(IEnumerable<Task<Result<T, E>>> results)
     {
         ArgumentNullException.ThrowIfNull(results);
-        return Core(Task.WhenAll(results));
-
-        static async ValueTask<Result<T[], E>> Core(Task<Result<T, E>[]> all)
-            => Combine((ReadOnlySpan<Result<T, E>>)await all.ConfigureAwait(false));
+        return CombineAsync(AsValueTasks(results));
     }
 
     /// <summary>Awaits every result; Ok with all values, or Err with every error.</summary>
@@ -42,10 +39,15 @@ public static partial class Result
     public static ValueTask<Result<T[], E[]>> CombineAllAsync<T, E>(IEnumerable<Task<Result<T, E>>> results)
     {
         ArgumentNullException.ThrowIfNull(results);
-        return Core(Task.WhenAll(results));
+        return CombineAllAsync(AsValueTasks(results));
+    }
 
-        static async ValueTask<Result<T[], E[]>> Core(Task<Result<T, E>[]> all)
-            => CombineAll((ReadOnlySpan<Result<T, E>>)await all.ConfigureAwait(false));
+    private static ValueTask<Result<T, E>>[] AsValueTasks<T, E>(IEnumerable<Task<Result<T, E>>> results)
+    {
+        var tasks = results as Task<Result<T, E>>[] ?? results.ToArray();
+        var valueTasks = new ValueTask<Result<T, E>>[tasks.Length];
+        for (var i = 0; i < tasks.Length; i++) valueTasks[i] = new ValueTask<Result<T, E>>(tasks[i]);
+        return valueTasks;
     }
 
     // Awaits every task, even after one throws, then rethrows the first exception.
