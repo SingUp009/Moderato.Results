@@ -294,14 +294,16 @@ Result.Try(() => int.Parse("x"));                           // Err(System.Format
 Result.Try(() => int.Parse("x"), ex => ex.GetType().Name);  // Err(FormatException)
 ```
 
-`Result.TryAsync` works the same way, and takes an optional `CancellationToken` as its last argument. Pass the token, and only the cancellation you asked for propagates; any other `OperationCanceledException` becomes an Err. Use the overloads whose delegate receives the token to pass it on.
+`Result.TryAsync` works the same way. To make it cancellable, pass a delegate that takes a `CancellationToken`, and the token as the last argument. Then only the cancellation you asked for propagates; any other `OperationCanceledException` becomes an Err. A token that is already canceled stops the call before the delegate runs.
 
 ```csharp
 var parsed = await Result.TryAsync(ct => ReadAsync(path, ct), ex => AppError.Io(ex), cancellationToken);
+var loaded = await Result.TryAsync(LoadAsync, cancellationToken);   // picks LoadAsync(CancellationToken)
 ```
 
-> [!important]
-> `HttpClient` reports a timeout as a `TaskCanceledException`. Without a token, `TryAsync` lets it propagate like any cancellation. Pass your `CancellationToken` so that a timeout becomes an Err while your own cancellation still propagates.
+A delegate that takes no token gets no token parameter, so every cancellation from it propagates.
+
+**Important:** `HttpClient` reports a timeout as a `TaskCanceledException`. Without a token, `TryAsync` lets it propagate like any cancellation. Pass your `CancellationToken` so that a timeout becomes an Err while your own cancellation still propagates.
 
 ### LINQ query syntax
 
