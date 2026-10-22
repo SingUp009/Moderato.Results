@@ -7,8 +7,15 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Deterministic>true</Deterministic>
 
-    <Authors>Moderato</Authors>
-    <Copyright>© Moderato</Copyright>
+    <Authors>SingUp_009</Authors>
+    <Copyright>© SingUp_009</Copyright>
     <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/SingUp009/Moderato.Results</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/SingUp009/Moderato.Results</PackageProjectUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 </Project>
