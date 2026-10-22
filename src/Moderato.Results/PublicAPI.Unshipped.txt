@@ -1,1 +1,4 @@
 #nullable enable
+Moderato.Results.Unsafe.ResultUnsafeExtensions
+static Moderato.Results.Unsafe.ResultUnsafeExtensions.Unwrap<T, E>(this Moderato.Results.Result<T, E> source) -> T
+static Moderato.Results.Unsafe.ResultUnsafeExtensions.UnwrapErr<T, E>(this Moderato.Results.Result<T, E> source) -> E

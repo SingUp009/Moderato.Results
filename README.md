@@ -64,6 +64,7 @@ var message = result switch
     - [OrElse](#orelse)
     - [Match](#match)
     - [UnwrapOr and UnwrapOrElse](#unwrapor-and-unwraporelse)
+    - [Unwrap and UnwrapErr](#unwrap-and-unwraperr)
     - [Tap and TapErr](#tap-and-taperr)
     - [Combine](#combine)
     - [Try](#try)
@@ -140,6 +141,7 @@ When you build a union-typed Err directly, name the type: `Result.Err<AppError>(
 | `match` | `Match(ok, err)`, plus an `Action` overload | `Match(state, ok, err)` |
 | `andTee` / `orTee` | `Tap(Action<T>)` / `TapErr(Action<E>)` | `Tap(state, …)` / `TapErr(state, …)` |
 | `unwrapOr` | `UnwrapOr(T)`, `UnwrapOrElse(Func<E, T>)` | `UnwrapOrElse(state, …)` |
+| `_unsafeUnwrap` / `_unsafeUnwrapErr` | `Unwrap()` / `UnwrapErr()` in `Moderato.Results.Unsafe` | - |
 | `combine` | `Result.Combine(r1, …, r8)` → tuple, `Result.Combine(IEnumerable / ReadOnlySpan)` → `T[]` | - |
 | `combineWithAllErrors` | `Result.CombineAll(…)` → `Result<…, E[]>` | - |
 | `fromThrowable` | `Result.Try(func)`, `Result.Try(func, ex => error)` | `Result.Try(state, func, …)` |
@@ -231,6 +233,26 @@ Take the value out, falling back to a default on an Err. `UnwrapOrElse` builds t
 ok.UnwrapOr(0);                    // 2
 err.UnwrapOr(0);                   // 0
 err.UnwrapOrElse(e => e.Length);   // 4
+```
+
+### Unwrap and UnwrapErr
+
+Take the value or the error out, throwing `InvalidOperationException` when the Result is the other case. They bring exceptions back, so they live in their own namespace and are only in scope where you import it. Use them in tests and prototypes, not in production code.
+
+```csharp
+using Moderato.Results.Unsafe;
+
+ok.Unwrap();       // 2
+err.Unwrap();      // throws: Called Unwrap on Err(boom).
+err.UnwrapErr();   // "boom"
+```
+
+When the error is an `Exception`, it becomes the inner exception. In a test project, a global using keeps them available everywhere:
+
+```xml
+<ItemGroup>
+  <Using Include="Moderato.Results.Unsafe" />
+</ItemGroup>
 ```
 
 ### Tap and TapErr
