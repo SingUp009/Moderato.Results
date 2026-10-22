@@ -54,7 +54,22 @@ public class CombineTests
         Assert.Throws<InvalidOperationException>(() => Result.Combine(Err("e"), default(Result<int, string>)));
         Assert.Throws<InvalidOperationException>(() => Result.Combine(new[] { Err("e"), default }));
         Assert.Throws<InvalidOperationException>(() => Result.Combine(new List<Result<int, string>> { Err("e"), default }));
-        Assert.Throws<InvalidOperationException>(() => Result.Combine(new[] { Err("e"), default }.Select(r => r)));
+    }
+
+    [Fact]
+    public void Combine_LazySequence_StopsAtFirstErr()
+    {
+        var evaluated = 0;
+        IEnumerable<Result<int, string>> Inputs()
+        {
+            evaluated++; yield return Ok(1);
+            evaluated++; yield return Err("stop");
+            evaluated++; yield return default;   // never reached, so never checked
+            while (true) { evaluated++; yield return Ok(0); }
+        }
+
+        Assert.Equal<Result<int[], string>>(Result.Err("stop"), Result.Combine(Inputs()));
+        Assert.Equal(2, evaluated);
     }
 
     [Fact]

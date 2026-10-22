@@ -23,14 +23,25 @@ public static partial class Result
     }
 
     /// <summary>Ok with all values, or the first Err.</summary>
+    /// <remarks>
+    /// Arrays and lists are checked for <c>default</c> in full. Any other sequence is enumerated lazily
+    /// and stops at the first Err, so elements after it are neither evaluated nor checked.
+    /// </remarks>
     public static Result<T[], E> Combine<T, E>(IEnumerable<Result<T, E>> results)
     {
         ArgumentNullException.ThrowIfNull(results);
         if (results is Result<T, E>[] array) return Combine((ReadOnlySpan<Result<T, E>>)array);
         if (results is List<Result<T, E>> list) return Combine((ReadOnlySpan<Result<T, E>>)CollectionsMarshal.AsSpan(list));
 
-        var buffer = new List<Result<T, E>>(results);
-        return Combine((ReadOnlySpan<Result<T, E>>)CollectionsMarshal.AsSpan(buffer));
+        var values = new List<T>();
+        foreach (var r in results)
+        {
+            r.ThrowIfDefault();
+            if (r._state == Result<T, E>.StateErr) return new Result<T[], E>(new Err<E>(r._error));
+            values.Add(r._value);
+        }
+
+        return new Result<T[], E>(new Ok<T[]>(values.ToArray()));
     }
 
     /// <summary>Ok with all values, or Err with every error.</summary>

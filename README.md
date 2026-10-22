@@ -270,6 +270,8 @@ err.TapErr(e => Console.WriteLine(e));  // prints boom, returns Err(boom)
 
 The two- to eight-argument overloads return a tuple; the `ReadOnlySpan` and `IEnumerable` overloads return an array. `Combine` short-circuits on the first Err, while `CombineAll` collects every error into an `E[]`.
 
+A lazy sequence passed to `Combine` stops being enumerated at the first Err, so later elements are never evaluated, and even an infinite sequence returns. `CombineAll` has to enumerate everything.
+
 ```csharp
 Result<string, string> name = Result.Ok("ada");
 Result<int, string> other = Result.Err("bad");
