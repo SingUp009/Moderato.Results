@@ -339,5 +339,4 @@ static string SelectMany(char src, char sel)
          + "    }\n";
 }
 
-// Delegates lists the delegate parameters to null-check; Args is the full argument list.
 record Op(string Name, string Extra, string Params, string Args, string Delegates, string Inner, bool IsAsync, string Summary);

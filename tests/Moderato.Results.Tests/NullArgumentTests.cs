@@ -45,7 +45,6 @@ public class NullArgumentTests
     [Fact]
     public void AsyncMembers_ThrowBeforeReturningATask()
     {
-        // Each call must throw synchronously, even when the source has not completed.
         Assert.Throws<ArgumentNullException>("mapper", () => { _ = Ok(1).MapAsync((Func<int, ValueTask<int>>)null!); });
         Assert.Throws<ArgumentNullException>("check", () => { _ = Ok(1).AndThroughAsync((Func<int, ValueTask<Result<Unit, string>>>)null!); });
         Assert.Throws<ArgumentNullException>("mapper", () => { _ = Later(Ok(1)).Map((Func<int, int>)null!); });

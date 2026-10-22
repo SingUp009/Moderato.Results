@@ -33,7 +33,6 @@ public class AndThroughTests
     [Fact]
     public void BranchingLambda_InfersWithoutTypeArguments()
     {
-        // Binds to the Result<Unit, E> overload, so no cast or type argument is needed.
         Assert.Equal(Err("odd"), Ok(3).AndThrough(x => x % 2 == 0 ? Result.Ok() : Result.Err("odd")));
     }
 

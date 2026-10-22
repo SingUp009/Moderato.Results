@@ -35,7 +35,6 @@ jobs:
 
       - run: dotnet pack src/Moderato.Results -c Release -o artifacts
 
-      # publish pushes exactly these packages, built and tested above.
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: packages
