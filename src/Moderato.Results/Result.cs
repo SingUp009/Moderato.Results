@@ -99,6 +99,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Maps the value.</summary>
     public Result<U, E> Map<U>(Func<T, U> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (_state == StateOk) return new Result<U, E>(new Ok<U>(mapper(_value)));
         if (_state == StateErr) return new Result<U, E>(new Err<E>(_error));
         return ThrowHelper.ThrowUninitialized<Result<U, E>>();
@@ -107,6 +108,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Maps the value without a closure.</summary>
     public Result<U, E> Map<TState, U>(TState state, Func<TState, T, U> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (_state == StateOk) return new Result<U, E>(new Ok<U>(mapper(state, _value)));
         if (_state == StateErr) return new Result<U, E>(new Err<E>(_error));
         return ThrowHelper.ThrowUninitialized<Result<U, E>>();
@@ -115,6 +117,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Maps the error.</summary>
     public Result<T, F> MapErr<F>(Func<E, F> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (_state == StateOk) return new Result<T, F>(new Ok<T>(_value));
         if (_state == StateErr) return new Result<T, F>(new Err<F>(mapper(_error)));
         return ThrowHelper.ThrowUninitialized<Result<T, F>>();
@@ -123,6 +126,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Maps the error without a closure.</summary>
     public Result<T, F> MapErr<TState, F>(TState state, Func<TState, E, F> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (_state == StateOk) return new Result<T, F>(new Ok<T>(_value));
         if (_state == StateErr) return new Result<T, F>(new Err<F>(mapper(state, _error)));
         return ThrowHelper.ThrowUninitialized<Result<T, F>>();
@@ -131,6 +135,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Chains a fallible operation on the value.</summary>
     public Result<U, E> AndThen<U>(Func<T, Result<U, E>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (_state == StateOk) return binder(_value);
         if (_state == StateErr) return new Result<U, E>(new Err<E>(_error));
         return ThrowHelper.ThrowUninitialized<Result<U, E>>();
@@ -139,6 +144,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Chains a fallible operation on the value without a closure.</summary>
     public Result<U, E> AndThen<TState, U>(TState state, Func<TState, T, Result<U, E>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (_state == StateOk) return binder(state, _value);
         if (_state == StateErr) return new Result<U, E>(new Err<E>(_error));
         return ThrowHelper.ThrowUninitialized<Result<U, E>>();
@@ -147,6 +153,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a fallible check on the value, keeping the value if it passes.</summary>
     public Result<T, E> AndThrough<U>(Func<T, Result<U, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (_state == StateOk) return Keep(check(_value));
         if (_state == StateErr) return this;
         return ThrowHelper.ThrowUninitialized<Result<T, E>>();
@@ -158,6 +165,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a fallible check on the value without a closure, keeping the value if it passes.</summary>
     public Result<T, E> AndThrough<TState, U>(TState state, Func<TState, T, Result<U, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (_state == StateOk) return Keep(check(state, _value));
         if (_state == StateErr) return this;
         return ThrowHelper.ThrowUninitialized<Result<T, E>>();
@@ -169,6 +177,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Recovers from the error.</summary>
     public Result<T, F> OrElse<F>(Func<E, Result<T, F>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (_state == StateOk) return new Result<T, F>(new Ok<T>(_value));
         if (_state == StateErr) return binder(_error);
         return ThrowHelper.ThrowUninitialized<Result<T, F>>();
@@ -177,6 +186,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Recovers from the error without a closure.</summary>
     public Result<T, F> OrElse<TState, F>(TState state, Func<TState, E, Result<T, F>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (_state == StateOk) return new Result<T, F>(new Ok<T>(_value));
         if (_state == StateErr) return binder(state, _error);
         return ThrowHelper.ThrowUninitialized<Result<T, F>>();
@@ -185,6 +195,8 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Folds into a single value.</summary>
     public R Match<R>(Func<T, R> ok, Func<E, R> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (_state == StateOk) return ok(_value);
         if (_state == StateErr) return err(_error);
         return ThrowHelper.ThrowUninitialized<R>();
@@ -193,6 +205,8 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Folds into a single value without a closure.</summary>
     public R Match<TState, R>(TState state, Func<TState, T, R> ok, Func<TState, E, R> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (_state == StateOk) return ok(state, _value);
         if (_state == StateErr) return err(state, _error);
         return ThrowHelper.ThrowUninitialized<R>();
@@ -201,6 +215,8 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs the action for the current case.</summary>
     public void Match(Action<T> ok, Action<E> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (_state == StateOk) ok(_value);
         else if (_state == StateErr) err(_error);
         else ThrowHelper.ThrowUninitialized();
@@ -209,6 +225,8 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs the action for the current case without a closure.</summary>
     public void Match<TState>(TState state, Action<TState, T> ok, Action<TState, E> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (_state == StateOk) ok(state, _value);
         else if (_state == StateErr) err(state, _error);
         else ThrowHelper.ThrowUninitialized();
@@ -217,6 +235,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a side effect on the value.</summary>
     public Result<T, E> Tap(Action<T> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (_state == StateOk) action(_value);
         else if (_state != StateErr) ThrowHelper.ThrowUninitialized();
         return this;
@@ -225,6 +244,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a side effect on the value without a closure.</summary>
     public Result<T, E> Tap<TState>(TState state, Action<TState, T> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (_state == StateOk) action(state, _value);
         else if (_state != StateErr) ThrowHelper.ThrowUninitialized();
         return this;
@@ -233,6 +253,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a side effect on the error.</summary>
     public Result<T, E> TapErr(Action<E> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (_state == StateErr) action(_error);
         else if (_state != StateOk) ThrowHelper.ThrowUninitialized();
         return this;
@@ -241,6 +262,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Runs a side effect on the error without a closure.</summary>
     public Result<T, E> TapErr<TState>(TState state, Action<TState, E> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (_state == StateErr) action(state, _error);
         else if (_state != StateOk) ThrowHelper.ThrowUninitialized();
         return this;
@@ -257,6 +279,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Returns the value, or one computed from the error.</summary>
     public T UnwrapOrElse(Func<E, T> fallback)
     {
+        ArgumentNullException.ThrowIfNull(fallback);
         if (_state == StateOk) return _value;
         if (_state == StateErr) return fallback(_error);
         return ThrowHelper.ThrowUninitialized<T>();
@@ -265,6 +288,7 @@ public readonly struct Result<T, E> : IUnion, IEquatable<Result<T, E>>
     /// <summary>Returns the value, or one computed from the error without a closure.</summary>
     public T UnwrapOrElse<TState>(TState state, Func<TState, E, T> fallback)
     {
+        ArgumentNullException.ThrowIfNull(fallback);
         if (_state == StateOk) return _value;
         if (_state == StateErr) return fallback(state, _error);
         return ThrowHelper.ThrowUninitialized<T>();

@@ -11,6 +11,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the value.</summary>
     public static ValueTask<Result<U, E>> Map<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, U> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<U, E>>(source.Result.Map(mapper));
         return Core(source, mapper);
 
@@ -21,6 +22,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the value without a closure.</summary>
     public static ValueTask<Result<U, E>> Map<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, U> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<U, E>>(source.Result.Map(state, mapper));
         return Core(source, state, mapper);
 
@@ -31,6 +33,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the value asynchronously.</summary>
     public static ValueTask<Result<U, E>> MapAsync<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, ValueTask<U>> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return source.Result.MapAsync(mapper);
         return Core(source, mapper);
 
@@ -41,6 +44,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the value asynchronously without a closure.</summary>
     public static ValueTask<Result<U, E>> MapAsync<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask<U>> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return source.Result.MapAsync(state, mapper);
         return Core(source, state, mapper);
 
@@ -51,6 +55,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the error.</summary>
     public static ValueTask<Result<T, F>> MapErr<T, E, F>(this ValueTask<Result<T, E>> source, Func<E, F> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, F>>(source.Result.MapErr(mapper));
         return Core(source, mapper);
 
@@ -61,6 +66,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the error without a closure.</summary>
     public static ValueTask<Result<T, F>> MapErr<T, E, TState, F>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, F> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, F>>(source.Result.MapErr(state, mapper));
         return Core(source, state, mapper);
 
@@ -71,6 +77,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the error asynchronously.</summary>
     public static ValueTask<Result<T, F>> MapErrAsync<T, E, F>(this ValueTask<Result<T, E>> source, Func<E, ValueTask<F>> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return source.Result.MapErrAsync(mapper);
         return Core(source, mapper);
 
@@ -81,6 +88,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Maps the error asynchronously without a closure.</summary>
     public static ValueTask<Result<T, F>> MapErrAsync<T, E, TState, F>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, ValueTask<F>> mapper)
     {
+        ArgumentNullException.ThrowIfNull(mapper);
         if (source.IsCompletedSuccessfully) return source.Result.MapErrAsync(state, mapper);
         return Core(source, state, mapper);
 
@@ -91,6 +99,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Chains a fallible operation on the value.</summary>
     public static ValueTask<Result<U, E>> AndThen<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, Result<U, E>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<U, E>>(source.Result.AndThen(binder));
         return Core(source, binder);
 
@@ -101,6 +110,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Chains a fallible operation on the value without a closure.</summary>
     public static ValueTask<Result<U, E>> AndThen<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, Result<U, E>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<U, E>>(source.Result.AndThen(state, binder));
         return Core(source, state, binder);
 
@@ -111,6 +121,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Chains an async fallible operation on the value.</summary>
     public static ValueTask<Result<U, E>> AndThenAsync<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, ValueTask<Result<U, E>>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return source.Result.AndThenAsync(binder);
         return Core(source, binder);
 
@@ -121,6 +132,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Chains an async fallible operation on the value without a closure.</summary>
     public static ValueTask<Result<U, E>> AndThenAsync<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask<Result<U, E>>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return source.Result.AndThenAsync(state, binder);
         return Core(source, state, binder);
 
@@ -131,6 +143,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a fallible check on the value, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThrough<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, Result<U, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.AndThrough(check));
         return Core(source, check);
 
@@ -141,6 +154,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a fallible check on the value, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThrough<T, E>(this ValueTask<Result<T, E>> source, Func<T, Result<Unit, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.AndThrough(check));
         return Core(source, check);
 
@@ -151,6 +165,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a fallible check on the value without a closure, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThrough<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, Result<U, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.AndThrough(state, check));
         return Core(source, state, check);
 
@@ -161,6 +176,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a fallible check on the value without a closure, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThrough<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, Result<Unit, E>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.AndThrough(state, check));
         return Core(source, state, check);
 
@@ -171,6 +187,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async fallible check on the value, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThroughAsync<T, E, U>(this ValueTask<Result<T, E>> source, Func<T, ValueTask<Result<U, E>>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return source.Result.AndThroughAsync(check);
         return Core(source, check);
 
@@ -181,6 +198,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async fallible check on the value, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThroughAsync<T, E>(this ValueTask<Result<T, E>> source, Func<T, ValueTask<Result<Unit, E>>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return source.Result.AndThroughAsync(check);
         return Core(source, check);
 
@@ -191,6 +209,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async fallible check on the value without a closure, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThroughAsync<T, E, TState, U>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask<Result<U, E>>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return source.Result.AndThroughAsync(state, check);
         return Core(source, state, check);
 
@@ -201,6 +220,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async fallible check on the value without a closure, keeping the value if it passes.</summary>
     public static ValueTask<Result<T, E>> AndThroughAsync<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask<Result<Unit, E>>> check)
     {
+        ArgumentNullException.ThrowIfNull(check);
         if (source.IsCompletedSuccessfully) return source.Result.AndThroughAsync(state, check);
         return Core(source, state, check);
 
@@ -211,6 +231,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Recovers from the error.</summary>
     public static ValueTask<Result<T, F>> OrElse<T, E, F>(this ValueTask<Result<T, E>> source, Func<E, Result<T, F>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, F>>(source.Result.OrElse(binder));
         return Core(source, binder);
 
@@ -221,6 +242,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Recovers from the error without a closure.</summary>
     public static ValueTask<Result<T, F>> OrElse<T, E, TState, F>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, Result<T, F>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, F>>(source.Result.OrElse(state, binder));
         return Core(source, state, binder);
 
@@ -231,6 +253,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Recovers from the error asynchronously.</summary>
     public static ValueTask<Result<T, F>> OrElseAsync<T, E, F>(this ValueTask<Result<T, E>> source, Func<E, ValueTask<Result<T, F>>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return source.Result.OrElseAsync(binder);
         return Core(source, binder);
 
@@ -241,6 +264,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Recovers from the error asynchronously without a closure.</summary>
     public static ValueTask<Result<T, F>> OrElseAsync<T, E, TState, F>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, ValueTask<Result<T, F>>> binder)
     {
+        ArgumentNullException.ThrowIfNull(binder);
         if (source.IsCompletedSuccessfully) return source.Result.OrElseAsync(state, binder);
         return Core(source, state, binder);
 
@@ -251,6 +275,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Folds into a single value.</summary>
     public static ValueTask<R> Match<T, E, R>(this ValueTask<Result<T, E>> source, Func<T, R> ok, Func<E, R> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully) return new ValueTask<R>(source.Result.Match(ok, err));
         return Core(source, ok, err);
 
@@ -261,6 +287,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Folds into a single value without a closure.</summary>
     public static ValueTask<R> Match<T, E, TState, R>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, R> ok, Func<TState, E, R> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully) return new ValueTask<R>(source.Result.Match(state, ok, err));
         return Core(source, state, ok, err);
 
@@ -271,6 +299,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Folds into a single value asynchronously.</summary>
     public static ValueTask<R> MatchAsync<T, E, R>(this ValueTask<Result<T, E>> source, Func<T, ValueTask<R>> ok, Func<E, ValueTask<R>> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully) return source.Result.MatchAsync(ok, err);
         return Core(source, ok, err);
 
@@ -281,6 +311,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Folds into a single value asynchronously without a closure.</summary>
     public static ValueTask<R> MatchAsync<T, E, TState, R>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask<R>> ok, Func<TState, E, ValueTask<R>> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully) return source.Result.MatchAsync(state, ok, err);
         return Core(source, state, ok, err);
 
@@ -291,6 +323,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs the action for the current case.</summary>
     public static ValueTask Match<T, E>(this ValueTask<Result<T, E>> source, Action<T> ok, Action<E> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully)
         {
             source.Result.Match(ok, err);
@@ -305,6 +339,8 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs the action for the current case without a closure.</summary>
     public static ValueTask Match<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Action<TState, T> ok, Action<TState, E> err)
     {
+        ArgumentNullException.ThrowIfNull(ok);
+        ArgumentNullException.ThrowIfNull(err);
         if (source.IsCompletedSuccessfully)
         {
             source.Result.Match(state, ok, err);
@@ -319,6 +355,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a side effect on the value.</summary>
     public static ValueTask<Result<T, E>> Tap<T, E>(this ValueTask<Result<T, E>> source, Action<T> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.Tap(action));
         return Core(source, action);
 
@@ -329,6 +366,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a side effect on the value without a closure.</summary>
     public static ValueTask<Result<T, E>> Tap<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Action<TState, T> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.Tap(state, action));
         return Core(source, state, action);
 
@@ -339,6 +377,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async side effect on the value.</summary>
     public static ValueTask<Result<T, E>> TapAsync<T, E>(this ValueTask<Result<T, E>> source, Func<T, ValueTask> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return source.Result.TapAsync(action);
         return Core(source, action);
 
@@ -349,6 +388,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async side effect on the value without a closure.</summary>
     public static ValueTask<Result<T, E>> TapAsync<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Func<TState, T, ValueTask> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return source.Result.TapAsync(state, action);
         return Core(source, state, action);
 
@@ -359,6 +399,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a side effect on the error.</summary>
     public static ValueTask<Result<T, E>> TapErr<T, E>(this ValueTask<Result<T, E>> source, Action<E> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.TapErr(action));
         return Core(source, action);
 
@@ -369,6 +410,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs a side effect on the error without a closure.</summary>
     public static ValueTask<Result<T, E>> TapErr<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Action<TState, E> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return new ValueTask<Result<T, E>>(source.Result.TapErr(state, action));
         return Core(source, state, action);
 
@@ -379,6 +421,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async side effect on the error.</summary>
     public static ValueTask<Result<T, E>> TapErrAsync<T, E>(this ValueTask<Result<T, E>> source, Func<E, ValueTask> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return source.Result.TapErrAsync(action);
         return Core(source, action);
 
@@ -389,6 +432,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Runs an async side effect on the error without a closure.</summary>
     public static ValueTask<Result<T, E>> TapErrAsync<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, ValueTask> action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         if (source.IsCompletedSuccessfully) return source.Result.TapErrAsync(state, action);
         return Core(source, state, action);
 
@@ -409,6 +453,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Returns the value, or one computed from the error.</summary>
     public static ValueTask<T> UnwrapOrElse<T, E>(this ValueTask<Result<T, E>> source, Func<E, T> fallback)
     {
+        ArgumentNullException.ThrowIfNull(fallback);
         if (source.IsCompletedSuccessfully) return new ValueTask<T>(source.Result.UnwrapOrElse(fallback));
         return Core(source, fallback);
 
@@ -419,6 +464,7 @@ public static class ResultValueTaskExtensions
     /// <summary>Returns the value, or one computed from the error without a closure.</summary>
     public static ValueTask<T> UnwrapOrElse<T, E, TState>(this ValueTask<Result<T, E>> source, TState state, Func<TState, E, T> fallback)
     {
+        ArgumentNullException.ThrowIfNull(fallback);
         if (source.IsCompletedSuccessfully) return new ValueTask<T>(source.Result.UnwrapOrElse(state, fallback));
         return Core(source, state, fallback);
 
