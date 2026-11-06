@@ -1,6 +1,6 @@
 # Moderato.Results
 
-[neverthrow](https://github.com/supermacro/neverthrow) for C#
+Result for C#
 
 ```csharp
 // try / catch
