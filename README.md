@@ -44,8 +44,6 @@ var message = result switch
 };
 ```
 
-**Warning:** .NET 11 is in preview, and so is this library.
-
 ## Table of contents
 
 - [Moderato.Results](#moderatoresults)
@@ -80,7 +78,7 @@ var message = result switch
 
 ## Requirements
 
-- .NET 11 SDK (`11.0.100-rc.2` or later), `net11.0`
+- .NET 11 SDK (`11.0.100` or later), `net11.0`
 - C# 15
 
 The library is Native AOT compatible (`IsAotCompatible`).
@@ -362,7 +360,7 @@ The async APIs return `ValueTask<Result<T, E>>`. Like any `ValueTask`, it must b
 ## Installation
 
 ```
-dotnet add package Moderato.Results --prerelease
+dotnet add package Moderato.Results
 ```
 
 ### From source

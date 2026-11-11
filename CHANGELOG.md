@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-11
+
+### Changed
+
+- First stable release of Moderato.Results. Builds use the stable .NET 11 SDK.
+
 ## [0.1.0-preview.4] - 2026-10-22
 
 ### Breaking changes
@@ -69,7 +75,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - LINQ query syntax over `Result`, `ValueTask<Result>` and `Task<Result>`.
 - Async extensions on `ValueTask<Result<T, E>>` and `Task<Result<T, E>>`.
 
-[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.4...HEAD
+[Unreleased]: https://github.com/SingUp009/Moderato.Results/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.4...v1.0.0
 [0.1.0-preview.4]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.3...v0.1.0-preview.4
 [0.1.0-preview.3]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.2...v0.1.0-preview.3
 [0.1.0-preview.2]: https://github.com/SingUp009/Moderato.Results/compare/v0.1.0-preview.1...v0.1.0-preview.2
